@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import getEnvVars from './tools/getEnvVars';
+import { WordModule } from './word/word.module';
 
 const env = getEnvVars();
 
@@ -18,6 +19,7 @@ const env = getEnvVars();
       entities: ['dist/**/entity/*.entity{.ts,.js}'],
       synchronize: false,
     }),
+    WordModule,
   ],
   controllers: [AppController],
   providers: [AppService],

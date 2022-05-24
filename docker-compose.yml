@@ -35,7 +35,7 @@ services:
       - -c
       - |
         cd /home/service
-        # npm run typeorm:cli -- migration:run
+        npm run typeorm:cli -- migration:run
         npm run start:${START_ENV}
     depends_on:
       postgres:
