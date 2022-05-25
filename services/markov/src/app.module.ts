@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import getEnvVars from './tools/getEnvVars';
 import { WordModule } from './word/word.module';
 import { ParserModule } from './parser/parser.module';
+import { GeneratorModule } from './generator/generator.module';
 
 const env = getEnvVars();
 
@@ -20,6 +21,7 @@ const env = getEnvVars();
     }),
     WordModule,
     ParserModule,
+    GeneratorModule,
   ],
   controllers: [],
   providers: [],
