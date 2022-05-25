@@ -29,17 +29,23 @@ export class GeneratorService {
   }
 
   private async getNextWord(current: Word): Promise<Word> {
-    const nextWords = await this.nextWordRepository.find({
-      where: { word: current },
-      relations: ['nextWord'],
-    });
+    const nextWords = await this.nextWordRepository
+      .createQueryBuilder()
+      .where({ word: current })
+      .orderBy('RANDOM()')
+      .getMany();
 
     const seed = Math.floor(Math.random() * (current.count + 1));
     let n = 0;
     for (const next of nextWords) {
       n += next.count;
       if (n >= seed) {
-        return next.nextWord;
+        return (
+          await this.nextWordRepository.findOne({
+            where: { id: next.id },
+            relations: ['nextWord'],
+          })
+        ).nextWord;
       }
     }
 
