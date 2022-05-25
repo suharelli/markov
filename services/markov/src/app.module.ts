@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import getEnvVars from './tools/getEnvVars';
 import { WordModule } from './word/word.module';
+import { ParserModule } from './parser/parser.module';
 
 const env = getEnvVars();
 
@@ -20,8 +19,9 @@ const env = getEnvVars();
       synchronize: false,
     }),
     WordModule,
+    ParserModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

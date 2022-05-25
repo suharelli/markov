@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { NextWord } from './next-word.entity';
 
 @Entity()
@@ -7,6 +13,7 @@ export class Word {
   id: number;
 
   @Column()
+  @Index({ unique: true })
   phrase: string;
 
   @Column()
