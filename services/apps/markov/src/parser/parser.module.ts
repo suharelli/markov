@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Word } from '../word/entity/word.entity';
-import { NextWord } from '../word/entity/next-word.entity';
 import { ParserController } from './parser.controller';
 import { ParserService } from './parser.service';
-import { Title } from './entity/title.entity';
+import { Word } from '@app/common/entity/word.entity';
+import { NextWord } from '@app/common/entity/next-word.entity';
+import { Title } from '@app/common/entity/title.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Word, NextWord, Title])],

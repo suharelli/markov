@@ -29,17 +29,38 @@ services:
       - NODE_ENV=${NODE_ENV}
       - TZ=Europe/Moscow
     volumes:
-      - ./services/markov:/home/service
+      - ./services:/home/service
     command:
       - /bin/bash
       - -c
       - |
         cd /home/service
         npm run typeorm:cli -- migration:run
-        npm run start:${START_ENV}
+        npm run start:markov:${START_ENV}
     depends_on:
       postgres:
         condition: service_healthy
     restart: ${RESTART_POLICY}
-
+  parser:
+    image: node:16
+    container_name: parser
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      - PORT=${PORT}
+      - NODE_ENV=${NODE_ENV}
+      - TZ=Europe/Moscow
+    volumes:
+      - ./services:/home/service
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /home/service
+        npm run typeorm:cli -- migration:run
+        npm run start:parser:${START_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: ${RESTART_POLICY}
 

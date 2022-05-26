@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Word } from '../word/entity/word.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { END, START } from '../parser/consts';
-import { NextWord } from '../word/entity/next-word.entity';
 import { RuntimeException } from '@nestjs/core/errors/exceptions/runtime.exception';
+import { NextWord } from '@app/common/entity/next-word.entity';
+import { Word } from '@app/common/entity/word.entity';
 
 @Injectable()
 export class GeneratorService {
