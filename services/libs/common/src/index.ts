@@ -1,12 +1,12 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import getEnvVars from '../../../apps/markov/src/tools/getEnvVars';
 import { Word } from '@app/common/entity/word.entity';
 import { NextWord } from '@app/common/entity/next-word.entity';
 import { Title } from '@app/common/entity/title.entity';
+import { getEnv } from '@app/common/tools/getEnvVars';
 export * from './common.module';
 export * from './common.service';
 
-const env = getEnvVars();
+const env = getEnv();
 
 export function getPgRealTypeOrmModule() {
   return TypeOrmModule.forRoot({

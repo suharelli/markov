@@ -19,6 +19,23 @@ services:
       timeout: 5s
       retries: 5
     restart: ${RESTART_POLICY}
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    environment:
+      - TZ=Europe/Moscow
+      - RABBITMQ_DEFAULT_VHOST=${RABBIT_VIRTUAL_HOST}
+      - RABBITMQ_DEFAULT_USER=${RABBIT_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBIT_DEFAULT_PASS}
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 3s
+      timeout: 12s
+      retries: 5
+      start_period: 2s
+    volumes:
+      - ./rabbit_data:/var/lib/rabbitmq
+    restart: ${RESTART_POLICY}
   markov:
     image: node:16
     container_name: markov
@@ -40,14 +57,13 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     restart: ${RESTART_POLICY}
   parser:
     image: node:16
     container_name: parser
-    ports:
-      - ${PORT}:${PORT}
     environment:
-      - PORT=${PORT}
       - NODE_ENV=${NODE_ENV}
       - TZ=Europe/Moscow
     volumes:
@@ -57,10 +73,11 @@ services:
       - -c
       - |
         cd /home/service
-        npm run typeorm:cli -- migration:run
         npm run start:parser:${START_ENV}
     depends_on:
       postgres:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     restart: ${RESTART_POLICY}
 

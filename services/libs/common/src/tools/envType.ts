@@ -9,4 +9,5 @@ export type ENV_VARS = {
   TYPEORM_DATABASE: string;
   TYPEORM_HOST: string;
   TYPEORM_CONNECTION: string;
+  QUEUE_PARSER: string;
 };

@@ -1,12 +1,21 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { ParserService } from './parser.service';
+import { Controller, Get, Inject, Query } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { getEnv } from '@app/common/tools/getEnvVars';
+import { sendMessage } from '@app/common/tools/msTools';
+
+const env = getEnv();
 
 @Controller()
 export class ParserController {
-  constructor(private readonly parserService: ParserService) {}
+  constructor(
+    @Inject(env.QUEUE_PARSER) private readonly parserQueue: ClientProxy,
+  ) {}
 
   @Get('/parse')
   parse(@Query('page') page: number, @Query('count') count: number) {
-    return this.parserService.parse(Number(page), Number(count));
+    return sendMessage(this.parserQueue, 'parse', {
+      page: Number(page),
+      count: Number(count),
+    });
   }
 }

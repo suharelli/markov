@@ -13,6 +13,6 @@ switch (process.env.NODE_ENV) {
 
 dotenv.config({ path });
 
-export default function (): ENV_VARS {
-  return process.env as ENV_VARS;
-}
+const getEnv = () => process.env as ENV_VARS;
+
+export { getEnv };

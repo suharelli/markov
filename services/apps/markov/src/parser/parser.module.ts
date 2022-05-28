@@ -1,14 +1,24 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ParserController } from './parser.controller';
-import { ParserService } from './parser.service';
-import { Word } from '@app/common/entity/word.entity';
-import { NextWord } from '@app/common/entity/next-word.entity';
-import { Title } from '@app/common/entity/title.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { getEnv } from '@app/common/tools/getEnvVars';
+
+const env = getEnv();
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Word, NextWord, Title])],
+  imports: [
+    ClientsModule.register([
+      {
+        name: env.QUEUE_PARSER,
+        transport: Transport.RMQ,
+        options: {
+          urls: [env.RABBIT_URL],
+          queue: env.QUEUE_PARSER,
+        },
+      },
+    ]),
+  ],
   controllers: [ParserController],
-  providers: [ParserService],
+  providers: [],
 })
 export class ParserModule {}
