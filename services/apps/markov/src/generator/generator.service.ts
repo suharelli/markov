@@ -29,11 +29,7 @@ export class GeneratorService {
   }
 
   private async getNextWord(current: Word): Promise<Word> {
-    const nextWords = await this.nextWordRepository
-      .createQueryBuilder()
-      .where({ word: current })
-      .orderBy('RANDOM()')
-      .getMany();
+    const nextWords = await this.getNextWords(current);
 
     const seed = Math.floor(Math.random() * (current.count + 1));
     let n = 0;
@@ -50,5 +46,13 @@ export class GeneratorService {
     }
 
     throw new RuntimeException('No next word found');
+  }
+
+  private getNextWords(word: Word): Promise<NextWord[]> {
+    return this.nextWordRepository
+      .createQueryBuilder()
+      .where({ word })
+      .orderBy('RANDOM()')
+      .getMany();
   }
 }

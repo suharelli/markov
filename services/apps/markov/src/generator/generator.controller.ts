@@ -6,7 +6,7 @@ export class GeneratorController {
   constructor(private readonly generatorService: GeneratorService) {}
 
   @Get('/generate')
-  generate() {
+  generate(): Promise<string> {
     return this.generatorService.generate();
   }
 }
